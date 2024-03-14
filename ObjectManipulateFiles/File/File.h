@@ -28,7 +28,7 @@ public:
 
 	int GetNumLines( );
 
-	void Move( std::string _path );
+	bool Move( std::string _path );
 	void Copy( std::string _path , std::string _name = "" );
 
 

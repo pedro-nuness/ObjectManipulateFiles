@@ -5,14 +5,13 @@
 int main( )
 {
 	//Define file path
+	//		   path   filename
 	File _file( "" , "test.txt" );
 
 	//Create the file
 	if ( _file.Create( ) ) {
 		std::cout << "Created file!\n";
 	}
-
-	_file.Move( "C:\\Move\\" );
 
 	//Check if it's empty
 	if ( _file.IsEmpty( ) ) {

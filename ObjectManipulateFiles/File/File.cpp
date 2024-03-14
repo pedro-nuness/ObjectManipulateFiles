@@ -1,4 +1,5 @@
 #include "File.h"
+#include <iostream>
 #include <filesystem>
 
 File::File( std::string _filepath , std::string _filename )
@@ -12,12 +13,13 @@ bool File::Delete( ) {
 	if ( !Exists( ) )
 		return false;
 
-	return std::remove( this->FullPath.c_str( ) );
+	return std::filesystem::remove( this->FullPath.c_str( ) );
 }
 
 bool File::Create( ) {
-	std::ofstream _file( this->FullPath );
-	return _file.is_open( );
+	std::ofstream  _file( this->FullPath );
+	_file.open( this->FullPath );
+	return Exists( );
 }
 
 
@@ -161,7 +163,7 @@ std::vector<File> File::GetCopies( ) {
 	return this->Copies;
 }
 
-void File::Move( std::string _path )
+bool File::Move( std::string _path )
 {
 	std::vector<std::string >_currentdata;
 
@@ -169,21 +171,27 @@ void File::Move( std::string _path )
 		_currentdata = ReadLines( );
 
 	if ( !Exists( ) )
-		return;
+		return false;
 	
 	Delete( );
 	{
 		this->FilePath = _path;
 		this->FullPath = this->FilePath + this->FileName;
 
-		Create( );
+		if ( Create( ) ) {
 
-		if ( !_currentdata.empty( ) ) {
-			for ( auto data : _currentdata )
-				Write( data );
-		}		
+			if ( !_currentdata.empty( ) ) {
+				for ( auto data : _currentdata )
+					Write( data );
+			}
+
+			return true;
+		}
+		else {
+			std::cout << "[FS]: Failed creating file!\n";
+			return false;
+		}
 	}
-
 }
 
 
