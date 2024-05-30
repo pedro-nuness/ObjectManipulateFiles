@@ -2,37 +2,117 @@
 
 This C++ utility project is designed to simplify file manipulation tasks on Windows systems. The project provides a convenient interface for treating files as objects, allowing you to perform various operations such as creating, reading, writing, and deleting files with ease.
 
-## Key Features:
+# Setting Up
+**Include Necessary Files:**
+Ensure you include the File.h header file in your project where you intend to use the File class.
+```
+#include "File.h"
+```
 
-**File Object:** The project introduces a File class that represents a file, with attributes like file path, file name, and full path.
+# Functionalities
 
-**File Creation:** You can easily create a new file by specifying the file's path and name, and the utility takes care of the rest.
+The File class provides the following functionalities:
 
-**File Deletion:** Safely delete files, and it checks whether the file exists before attempting to delete it.
+### Constructor:
+``Initializes a File object with the specified file path and filename.``
+```
+File myFile("/path/to/directory", "example.txt");
+```
+### File Operations:
+1. ``Create():`` Creates the file. Returns true if the file is successfully created, otherwise returns false.
+2. ``Delete():`` Deletes the file. Returns true if the file is successfully deleted, otherwise returns false.
+3. ``Exists():`` Checks if the file exists. Returns true if the file exists, otherwise returns false.
+4. ``IsEmpty():`` Checks if the file is empty. Returns true if the file is empty, otherwise returns false.
 
-## Read Operations:
+```
+if (myFile.Create()) {
+    std::cout << "File created successfully." << std::endl;
+} else {
+    std::cout << "Failed to create the file." << std::endl;
+}
 
-Read the entire contents of a file.
-Read a specific line from the file.
-Retrieve all lines from the file as a vector of strings.
-Check if the file is empty.
-## Write Operations:
+if (myFile.Exists()) {
+    std::cout << "File exists." << std::endl;
+}
 
-Clear the contents of a file.
-Erase a specific line from the file.
-Write data to a specific line in the file.
+if (myFile.IsEmpty()) {
+    std::cout << "File is empty." << std::endl;
+}
 
- **File Existence:** Easily check if a file exists in the specified path.
+if (myFile.Delete()) {
+    std::cout << "File deleted successfully." << std::endl;
+} else {
+    std::cout << "Failed to delete the file." << std::endl;
+}
+```
+### Content Manipulation:
+1. ``Clear():`` Clears the file content.
+2. ``EraseLine(int _line):`` Erases a specific line in the file.
+3. ``WriteOnLine(std::string _data, int _line):`` Writes data to a specific line in the file.
+4. ``Write(T _data, bool _BreakLine = true):`` Writes data to the file, appending a new line by default.
+```
+myFile.Clear();
+myFile.WriteOnLine("Hello, World!", 1);
+myFile.EraseLine(1);
+myFile.Write("Append this text.");
+```
+### File Information:
 
-**File Copying:** Copy the contents of a file to a new file in a different location.
+1. ``GetNumLines():`` Returns the number of lines in the file.
+2. ``GetFilePath():`` Returns the file path.
+3. ``GetFileName():`` Returns the file name.
+4. ``GetFullFilePath():`` Returns the full file path.
 
-**File Moving:** Move a file to a different location while preserving its content.
+```
+int numLines = myFile.GetNumLines();
+std::cout << "Number of lines: " << numLines << std::endl;
 
-**File Versioning:** The utility can keep track of copied versions of the same file.
+std::string filePath = myFile.GetFilePath();
+std::cout << "File path: " << filePath << std::endl;
 
-## Usage:
+std::string fileName = myFile.GetFileName();
+std::cout << "File name: " << fileName << std::endl;
 
-This utility is especially useful for applications that need to interact with files as objects and perform various file-related tasks. By including the File.h header and using the File class, you can streamline your file handling operations on Windows.
+std::string fullFilePath = myFile.GetFullFilePath();
+std::cout << "Full file path: " << fullFilePath << std::endl;
+```
+### File Operations:
+
+1. ``Move(std::string _path):`` Moves the file to a new path. Returns true if the move is successful, otherwise returns false.
+2. ``Copy(std::string _path, std::string _name = ""):`` Copies the file to a new path with an optional new name.
+3. ``GetCopies():`` Returns a vector of File objects representing copies of the file.
+
+```
+if (myFile.Move("/new/path/to/directory")) {
+    std::cout << "File moved successfully." << std::endl;
+} else {
+    std::cout << "Failed to move the file." << std::endl;
+}
+
+myFile.Copy("/path/to/another/directory", "copy.txt");
+
+std::vector<File> copies = myFile.GetCopies();
+for (const auto& copy : copies) {
+    std::cout << "Copy: " << copy.GetFullFilePath() << std::endl;
+}
+```
+### Reading Content:
+1. ``Read():`` Reads the entire content of the file.
+2. ``ReadLine(int _line):`` Reads a specific line from the file.
+3. ``ReadLines():`` Reads all lines from the file and returns them as a vector of strings.
+```
+std::string content = myFile.Read();
+std::cout << "File content: " << content << std::endl;
+
+std::string line = myFile.ReadLine(1);
+std::cout << "Line 1: " << line << std::endl;
+
+std::vector<std::string> lines = myFile.ReadLines();
+for (const auto& line : lines) {
+    std::cout << line << std::endl;
+}
+```
+
 
 ## Note:
 
